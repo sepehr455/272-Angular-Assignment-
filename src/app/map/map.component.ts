@@ -1,12 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-import { CommonModule } from '@angular/common';
 import * as L from 'leaflet';
 
 @Component({
   selector: 'leaflet-map',
-  imports: [CommonModule],
   templateUrl: './map.component.html',
+  standalone: true,
   styleUrl: './map.component.css'
+
 })
 export class MapComponent implements OnInit {
 
