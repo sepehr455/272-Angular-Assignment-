@@ -29,6 +29,7 @@
               "src/assets"
             ],
             "styles": [
+              "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css",
               "src/styles.css"
             ],
             "scripts": []
