@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import {MapComponent} from "../map/map.component";
-import {DisplayReportsComponent} from "../display-report/display-reports.component";
+import {DisplayReportsComponent} from "../display-reports/display-reports.component";
 import {CreateButtonComponent} from "../create-button/create-button.component";
 
 @Component({

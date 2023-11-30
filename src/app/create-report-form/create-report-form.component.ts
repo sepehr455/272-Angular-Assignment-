@@ -4,13 +4,13 @@ import {Report} from "../Report";
 import {ReportService} from "../ReportService";
 
 @Component({
-  selector: 'app-create-report',
+  selector: 'app-create-report-form',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './create-report.component.html',
-  styleUrl: './create-report.component.css'
+  templateUrl: './create-report-form.component.html',
+  styleUrl: './create-report-form.component.css'
 })
-export class CreateReportComponent implements OnInit{
+export class CreateReportFormComponent implements OnInit{
   newReport: Report = new Report('', '', '', '', '', '', 'Open', '');
 
   constructor(private reportService: ReportService) {

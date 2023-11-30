@@ -5,7 +5,7 @@ import {MapComponent} from "../map/map.component";
 import {RouterOutlet} from "@angular/router";
 
 @Component({
-    selector: 'app-display-report',
+    selector: 'app-display-reports',
     standalone: true,
     imports: [CommonModule, MapComponent, RouterOutlet],
     templateUrl: './display-reports.component.html',
