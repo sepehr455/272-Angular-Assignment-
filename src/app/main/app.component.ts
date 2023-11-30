@@ -3,13 +3,14 @@ import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import {MapComponent} from "../map/map.component";
 import {DisplayReportsComponent} from "../display-report/display-reports.component";
+import {CreateButtonComponent} from "../create-button/create-button.component";
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
   standalone: true,
-    imports: [CommonModule, RouterOutlet, MapComponent, DisplayReportsComponent]
+  imports: [CommonModule, RouterOutlet, MapComponent, DisplayReportsComponent, CreateButtonComponent]
 })
 export class AppComponent {
   title = 'AngularAssignment';

@@ -1,0 +1,11 @@
+.create_button {
+    background-color: #5e9642; /* Red color */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 15px;
+    width: 100px;
+    height: 40px;
+}
