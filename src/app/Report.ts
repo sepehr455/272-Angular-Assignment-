@@ -1,4 +1,6 @@
+
 export class Report {
+  id: string;
   baddieName: string;
   location: string;
   reporterName: string;
@@ -9,6 +11,7 @@ export class Report {
   extraInfo: string;
 
   constructor(baddieName: string, location: string, reporterName: string, reporterPhone: string, reportDate: string, reportTime: string, status: "Open" | "Resolved", extraInfo: string) {
+    this.id = `id_${new Date().toISOString()}`;
     this.baddieName = baddieName;
     this.location = location;
     this.reporterName = reporterName;

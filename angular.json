@@ -6,9 +6,6 @@
     "AngularAssignment": {
       "projectType": "application",
       "schematics": {
-        "@schematics/angular:component": {
-          "standalone": false
-        }
       },
       "root": "",
       "sourceRoot": "src",

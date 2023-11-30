@@ -1,0 +1,19 @@
+<table>
+	<tr>
+		<td class="headerData">Location</td>
+		<td class="headerData">Baddie's Name</td>
+		<td class="headerData">Time Reported</td>
+		<td class="headerData">Status</td>
+	</tr>
+	<tr *ngFor="let report of reports">
+		<td class="data">{{report.location}}</td>
+		<td class="data">{{report.baddieName}}</td>
+		<td class="data">{{report.reportTime}}</td>
+		<td class="data">{{report.status}}</td>
+		<td><span class="moreInfo">MORE INFO</span></td>
+		<td>
+			<button class="delete-button"> Delete</button>
+		</td>
+</table>
+
+
