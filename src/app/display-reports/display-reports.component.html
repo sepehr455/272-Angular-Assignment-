@@ -12,7 +12,7 @@
 		<td class="data">{{report.status}}</td>
 		<td><span class="moreInfo">MORE INFO</span></td>
 		<td>
-			<button class="delete-button"> Delete</button>
+			<button (click)="displayDeletePopUp(report.id)" class="delete-button"> Delete</button>
 		</td>
 </table>
 

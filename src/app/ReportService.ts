@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Report} from './Report';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpResponse} from "@angular/common/http";
+import {BehaviorSubject} from "rxjs";
 
 @Injectable({providedIn: 'root'})
 
@@ -13,23 +14,46 @@ export class ReportService {
 
   private reports: Report[] = [];
 
+  updateReports() {
+    this.reports = [];
+    this.http.get(this.apiUrl).subscribe((responses: any) => {
+      responses.forEach((response: any) => {
+        const currentReport = {
+          id: response.key,
+          baddieName: response.data.baddieName,
+          location: response.data.location,
+          reporterName: response.data.reporterName,
+          reporterPhone: response.data.reporterPhone,
+          reportDate: response.data.reportDate,
+          reportTime: response.data.reportTime,
+          status: response.data.status,
+          extraInfo: response.data.extraInfo,
+          image: response.data.image
+        };
+        this.reports.push(currentReport);
+      });
+    });
+  }
+
   getReports(): Report[] {
+    this.updateReports();
     return this.reports;
   }
 
-  addReport(report: Report): void {
+
+  addReport(report: Report){
     this.reports.push(report);
     const requestObj = {
       "key": report.id,
       "data": {
-        "baddieName": report.baddieName.toString(),
-        "location": report.location.toString(),
-        "reporterName": report.reporterName.toString(),
-        "reporterPhone": report.reporterPhone.toString(),
-        "reportDate": report.reportDate.toString(),
-        "reportTime": report.reportTime.toString(),
-        "status": report.status.toString(),
-        "extraInfo": report.extraInfo.toString()
+        "baddieName": report.baddieName,
+        "location": report.location,
+        "reporterName": report.reporterName,
+        "reporterPhone": report.reporterPhone,
+        "reportDate": report.reportDate,
+        "reportTime": report.reportTime,
+        "status": report.status,
+        "extraInfo": report.extraInfo
       }
     }
 
@@ -38,22 +62,24 @@ export class ReportService {
     }
     );
   }
+
+  deleteReport(id: string) {
+    this.reports = this.reports.filter(report => report.id !== id);
+    this.http.delete(`${this.apiUrl}/${id}`).subscribe(() => {
+      console.log(`deleted ${id}`);
+    });
+  }
+
+  setStatusToResolved(id: string) {
+    const requestObj = {
+      "key": id,
+      "data": {
+        "status": "Resolved"
+      }
+    }
+    this.http.put(this.apiUrl, requestObj).subscribe((response) => {
+      console.log(response);
+    }
+    );
+  }
 }
-
-
-//   getReports(): Observable<Report[]> {
-//     return this.http.get<Report[]>(this.apiUrl);
-//   }
-//
-//   getReportById(id: string): Observable<Report> {
-//     return this.http.get<Report>(`${this.apiUrl}/${id}`);
-//   }
-//
-//   addReport(report: Report): Observable<Report> {
-//     return this.http.post<Report>(this.apiUrl, report);
-//   }
-//
-//   deleteReport(id: string): Observable<any> {
-//     return this.http.delete(`${this.apiUrl}/${id}`);
-//   }
-// }
