@@ -1,12 +1,17 @@
+import {Injectable} from '@angular/core';
+import {Report} from './Report';
+import {HttpClient} from "@angular/common/http";
 
-import { Injectable } from '@angular/core';
-import { Report } from './Report';
+@Injectable({providedIn: 'root'})
 
-@Injectable({ providedIn: 'root' })
+
 export class ReportService {
-  private reports: Report[] = [
-    // ... your initial reports
-  ];
+  private apiUrl = 'https://272.selfip.net/apps/L8N4sU0a3T/collections/data1/documents/';
+
+  constructor(private http: HttpClient) {
+  }
+
+  private reports: Report[] = [];
 
   getReports(): Report[] {
     return this.reports;
@@ -14,36 +19,28 @@ export class ReportService {
 
   addReport(report: Report): void {
     this.reports.push(report);
+    const requestObj = {
+      "key": report.id,
+      "data": {
+        "baddieName": report.baddieName.toString(),
+        "location": report.location.toString(),
+        "reporterName": report.reporterName.toString(),
+        "reporterPhone": report.reporterPhone.toString(),
+        "reportDate": report.reportDate.toString(),
+        "reportTime": report.reportTime.toString(),
+        "status": report.status.toString(),
+        "extraInfo": report.extraInfo.toString()
+      }
+    }
+
+    this.http.post(this.apiUrl, requestObj).subscribe((response) => {
+      console.log(response);
+    }
+    );
   }
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import { Injectable } from '@angular/core';
-// import { HttpClient } from '@angular/common/http';
-// import { Observable } from 'rxjs';
-// import { Report } from './Report';
-//
-// @Injectable({
-//   providedIn: 'root'
-// })
-// export class ReportService {
-//   private apiUrl = 'https://272.selfip.net/apps/L8N4sU0a3T/collections/AngularAssignment/documents';
-//
-//   constructor(private http: HttpClient) {}
-//
 //   getReports(): Observable<Report[]> {
 //     return this.http.get<Report[]>(this.apiUrl);
 //   }

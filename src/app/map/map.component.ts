@@ -50,4 +50,5 @@ export class MapComponent implements AfterViewInit {
     L.marker([49.1867, -123.8490]).addTo(this.map)
       .bindPopup('<b>SFU Surrey</b><br>cases reported').openPopup();
   }
+
 }

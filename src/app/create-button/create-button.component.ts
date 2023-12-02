@@ -15,9 +15,11 @@ export class CreateButtonComponent {
 
   openDialog(): void {
     this.dialog.open(CreateReportFormComponent, {
-      width: '600px',
+      width: '500px',
       height: '600px',
+      panelClass: 'custom-dialog-container',
       // additional configurations if needed
     });
   }
+
 }

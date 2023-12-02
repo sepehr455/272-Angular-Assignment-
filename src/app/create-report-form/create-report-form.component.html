@@ -1,1 +1,38 @@
-<button (click)="createReport()">Create</button>
+<form
+  [formGroup]="form"
+  (ngSubmit)="onSubmit(form.value)"
+>
+  <fieldset class="mainContainer">
+    <legend>Create Report</legend>
+    <div class="inputLabelPair">
+      <label for="nameInput">Baddie Name</label>
+      <input type="text" id="nameInput" placeholder="e.g. monster x" formControlName="baddieName"/>
+    </div>
+
+    <div class="inputLabelPair">
+      <label for="locationInput">Location</label>
+      <input type="text" id="locationInput" placeholder="e.g. 123 Main St." formControlName="location"/>
+    </div>
+
+
+    <div class="inputRow">
+      <div class="inputLabelPair">
+        <label for="reporterInput">Reporter Name</label>
+        <input type="text" id="reporterInput" name="1" placeholder="e.g. John" formControlName="reporterName">
+      </div>
+
+      <div class="inputLabelPair">
+        <label for="reporterPhoneInput">Reporter Phone#</label>
+        <input type="text" id="reporterPhoneInput" placeholder="e.g. 882-301-2898" formControlName="reporterPhone">
+      </div>
+    </div>
+
+    <div class="inputLabelPair">
+      <label for="extraInfoInput">Extra Info</label>
+      <input type="text" id="extraInfoInput">
+    </div>
+
+    <button (click)="createReport()" class="create_button">Submit</button>
+  </fieldset>
+
+</form>
