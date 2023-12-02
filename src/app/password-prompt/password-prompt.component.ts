@@ -18,6 +18,7 @@ export class PasswordPromptComponent implements OnInit {
   @Input() confirmAction!: () => void;
 
   constructor(private http: HttpClient,
+              private dialogRef: MatDialogRef<PasswordPromptComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any) {
   }
 
@@ -42,6 +43,7 @@ export class PasswordPromptComponent implements OnInit {
   onConfirm() {
     if (this.isPasswordValid) {
       this.confirmAction();
+      this.dialogRef.close();
     }
   }
 
