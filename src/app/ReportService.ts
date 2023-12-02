@@ -64,7 +64,11 @@ export class ReportService {
   }
 
   deleteReport(id: string) {
-    this.reports = this.reports.filter(report => report.id !== id);
+    this.reports.find((report, index) => {
+      if (report.id === id) {
+        this.reports.splice(index, 1);
+      }
+    });
     this.http.delete(`${this.apiUrl}/${id}`).subscribe(() => {
       console.log(`deleted ${id}`);
     });
