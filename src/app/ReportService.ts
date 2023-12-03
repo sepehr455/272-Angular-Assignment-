@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
-import {Report} from './Report';
+import {Location, Report} from './Report';
 import {HttpClient, HttpResponse} from "@angular/common/http";
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject, map, Observable} from "rxjs";
 
 @Injectable({providedIn: 'root'})
 
@@ -81,16 +81,69 @@ export class ReportService {
     });
   }
 
-  setStatusToResolved(id: string) {
-    const requestObj = {
-      "key": id,
-      "data": {
-        "status": "Resolved"
-      }
-    }
-    this.http.put(this.apiUrl, requestObj).subscribe((response) => {
-        console.log(response);
-      }
+  getReportById(id: string): Observable<Report | null> {
+    return this.http.get(`${this.apiUrl}/${id}`).pipe(
+      map((response: any) => {
+        if (!response) {
+          return null;
+        }
+        return {
+          id: response.key,
+          baddieName: response.data.baddieName,
+          location: response.data.location,
+          reporterName: response.data.reporterName,
+          reporterPhone: response.data.reporterPhone,
+          reportDate: response.data.reportDate,
+          reportTime: response.data.reportTime,
+          status: response.data.status,
+          extraInfo: response.data.extraInfo,
+          image: response.data.image
+        };
+      }),
     );
   }
+
+
+  setStatusToResolved(id: string) {
+    this.getReportById(id).subscribe((report) => {
+      if (!report) {
+        console.error('Report not found');
+        return;
+      }
+
+      // Clone the report object to avoid direct mutation
+      const requestObj = {
+        "key": report.id,
+        "data": {
+          "baddieName": report.baddieName,
+          "location": report.location,
+          "reporterName": report.reporterName,
+          "reporterPhone": report.reporterPhone,
+          "reportDate": report.reportDate,
+          "reportTime": report.reportTime,
+          "status": 'Resolved',
+          "extraInfo": report.extraInfo
+        }
+      }
+
+      // Send the updated report object to the server
+      this.http.put(`${this.apiUrl}/${id}`, requestObj).subscribe({
+        next: (response) => {
+          console.log(response);
+
+          // Update the local array of reports
+          this.reports = this.reports.map((report) => {
+              if (report.id === id) {
+                return {...report, status: 'Resolved'};
+              }
+
+              return report;
+            }
+          );
+          this.reportsSubject.next(this.reports);
+        },
+      });
+    });
+  }
+
 }
