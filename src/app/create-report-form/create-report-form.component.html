@@ -1,6 +1,6 @@
 <form
   [formGroup]="form"
-  (ngSubmit)="onSubmit(form.value)"
+  (ngSubmit)="onSubmit()"
 >
   <fieldset class="mainContainer">
     <h3>Create a Report</h3>
@@ -8,38 +8,75 @@
     <div class="inputLabelPair">
       <label for="nameInput">Baddie Name</label>
       <input type="text" id="nameInput" placeholder="e.g. monster x" formControlName="baddieName"/>
+      <div *ngIf="form.controls['baddieName'].invalid && (form.controls['baddieName'].touched)" class="error">
+        *invalid input
+      </div>
     </div>
 
     <div class="inputRow">
       <div class="inputLabelPair">
         <label for="reporterInput">Reporter Name</label>
         <input type="text" id="reporterInput" name="1" placeholder="e.g. John" formControlName="reporterName">
+        <div *ngIf="form.controls['reporterName'].invalid && (form.controls['reporterName'].touched)" class="error">
+          *invalid input
+        </div>
       </div>
 
       <div class="inputLabelPair">
         <label for="reporterPhoneInput">Reporter Phone#</label>
-        <input type="text" id="reporterPhoneInput" placeholder="e.g. 882-301-2898" formControlName="reporterPhone">
+        <input type="text" id="reporterPhoneInput" placeholder="e.g. 123-456-7890" formControlName="reporterPhone">
+        <div *ngIf="form.controls['reporterPhone'].invalid && (form.controls['reporterPhone'].touched)" class="error">
+          *invalid input
+        </div>
       </div>
     </div>
 
     <div class="inputLabelPair">
       <label for="imageInput">Image URL</label>
       <input type="text" id="imageInput" formControlName="image">
+      <div *ngIf="form.controls['image'].invalid && (form.controls['image'].touched)" class="error">
+        *invalid input
+      </div>
     </div>
 
     <div class="inputLabelPair">
       <label for="extraInfoInput">Extra Info</label>
       <input type="text" id="extraInfoInput" formControlName="extraInfo">
     </div>
+    <div class="row">
 
-    <div class="inputLabelPair">
-      <label for="locationName">Location Name</label>
-      <input type="text" id="locationName" formControlName="locationName">
+      <button type="button" (click)="toggleLocationSelection(false)" [disabled]="!isExistingLocationSelected">New
+        Location
+      </button>
+      <button type="button" (click)="toggleLocationSelection(true)"
+              [disabled]="isExistingLocationSelected || locations.length === 0">Existing
+        Location
+      </button>
     </div>
 
 
-    <div id="formMap" style="height: 400px;"></div>
-    <button (click)="createReport()" class="create_button">Submit</button>
+    <div *ngIf="isExistingLocationSelected">
+      <select formControlName="existingLocation">
+        <option *ngFor="let location of locations" [value]="location.name">
+          {{ location.name }}
+        </option>
+      </select>
+      <div *ngIf="form.controls['existingLocation'].invalid && (form.controls['existingLocation'].touched)" class="error">
+        *select a location
+      </div>
+    </div>
+
+    <div *ngIf="!isExistingLocationSelected" class="inputLabelPair">
+      <label for="locationName">Location Name</label>
+      <input type="text" id="locationName" formControlName="locationName">
+      <div *ngIf="form.controls['locationName'].invalid && (form.controls['locationName'].touched)" class="error">
+        *invalid input
+      </div>
+    </div>
+
+
+    <div *ngIf="!isExistingLocationSelected" id="formMap" [attr.data-key]="mapKey" style="height: 400px;"></div>
+    <button (click)="onSubmit()" class="create_button">Submit</button>
   </fieldset>
 
 </form>

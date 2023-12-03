@@ -6,7 +6,7 @@
     <td class="headerData" (click)="sortBy('status')">Status</td>
   </tr>
   <tr *ngFor="let report of reports | sort: currentSort">
-    <td class="data">{{report.location}}</td>
+    <td class="data">{{report.location.name}}</td>
     <td class="data">{{report.baddieName}}</td>
     <td class="data">{{report.reportTime}}</td>
     <td class="data">{{report.status}}

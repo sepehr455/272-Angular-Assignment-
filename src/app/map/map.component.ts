@@ -50,7 +50,7 @@ export class MapComponent implements OnInit {
     this.reportService.getLocations().subscribe(locations => {
       locations.forEach(location => {
         L.marker([location.xCoord, location.yCoord]).addTo(this.map)
-          .bindPopup(location.name + " (" + location.numberOfReports + ")");
+          .bindPopup(location.name + " (" + "Reported Cases: " + location.numberOfReports + ")");
       });
     });
   }

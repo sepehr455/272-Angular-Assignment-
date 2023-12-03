@@ -71,6 +71,7 @@ export class ReportService {
           this.reports.push(report);
           this.reportsSubject.next(this.reports);
           this.updateReports();
+          this.updateLocations();
         }
       }
     );
@@ -84,9 +85,9 @@ export class ReportService {
         if (index !== -1) {
           this.reports.splice(index, 1);
           this.reportsSubject.next(this.reports);
+          this.updateReports();
           this.updateLocations();
         }
-        console.log(`deleted ${id}`);
       },
     });
   }

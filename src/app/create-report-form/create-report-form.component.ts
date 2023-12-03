@@ -1,6 +1,6 @@
 import {AfterViewInit, Component} from '@angular/core';
 import {CommonModule, formatDate} from '@angular/common';
-import {Report} from "../Report";
+import {Location, Report} from "../Report";
 
 import {ReportService} from "../ReportService";
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
@@ -35,55 +35,84 @@ export class CreateReportFormComponent implements AfterViewInit {
   form: FormGroup;
   private map!: L.Map;
   private currentMarker: L.Marker | null = null;
-
+  public isExistingLocationSelected: boolean = false;
+  public locations: Location[] = [];
+  public mapKey: number = 0;
+  reporterPhone = new FormControl('');
 
   constructor(private reportService: ReportService) {
     let formControls = {
       baddieName: new FormControl('', [
         Validators.required,
-        Validators.pattern("[A-Za-z .'-]+"),
-        Validators.minLength(2)
       ]),
       locationName: new FormControl('', [
         Validators.required,
-        Validators.pattern("[A-Za-z .'-]+"),
-        Validators.minLength(2)
       ]),
       reporterName: new FormControl('', [
         Validators.required,
-        Validators.pattern("[A-Za-z .'-]+"),
-        Validators.minLength(2)
       ]),
       reporterPhone: new FormControl('', [
         Validators.required,
-        Validators.pattern("[0-9 .'-]+"),
-        Validators.minLength(10)
+        Validators.pattern(/^\d{3}-\d{3}-\d{4}$/)
       ]),
       status: new FormControl('', [
         Validators.required,
-        Validators.pattern("[A-Za-z .'-]+"),
-        Validators.minLength(2)
       ]),
       extraInfo: new FormControl('', [
         Validators.required,
-        Validators.pattern("[A-Za-z .'-]+"),
-        Validators.minLength(2)
       ]),
       image: new FormControl('', [
         Validators.required,
-        Validators.pattern("[A-Za-z .'-]+"),
-        Validators.minLength(2)
       ]),
+      locationSelectionMethod: new FormControl('new'),
+      existingLocation: new FormControl('',
+        [
+          Validators.required
+        ]),
     }
+
+
+
+
     this.form = new FormGroup(formControls);
+    this.reportService.getLocations().subscribe(data => {
+      this.locations = data;
+    });
+
+    this.form.get('reporterPhone')!.valueChanges.subscribe(value => {
+      this.formatPhoneNumber(value);
+    });
+
+
   }
 
-  onSubmit(newReport: Report) {
-    console.log(newReport);
-
+  //for formatting the phone number
+  private formatPhoneNumber(value: string): void {
+    if (value && value.length > 0) {
+      let formattedValue = value.replace(/\D/g, '').slice(0, 10); // Remove non-digits and limit to 10
+      if (formattedValue.length >= 4 && formattedValue.length <= 6) {
+        formattedValue = `${formattedValue.slice(0, 3)}-${formattedValue.slice(3)}`;
+      } else if (formattedValue.length > 6) {
+        formattedValue = `${formattedValue.slice(0, 3)}-${formattedValue.slice(3, 6)}-${formattedValue.slice(6)}`;
+      }
+      if (value !== formattedValue) {
+        this.form.get('reporterPhone')!.setValue(formattedValue, { emitEvent: false });
+      }
+    }
   }
 
-  ngAfterViewInit(): void {
+
+  onSubmit( ): void {
+    console.log("DEEEEEEEEEEEEEEEY")
+    if (this.form.valid) {
+      this.createReport();
+    } else {
+      this.form.markAllAsTouched();
+      console.error("Form is not valid");
+    }
+  }
+
+  private initializeMap(): void {
     this.map = L.map('formMap').setView([49.2, -123], 11);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       {
@@ -96,6 +125,20 @@ export class CreateReportFormComponent implements AfterViewInit {
       }
     ).addTo(this.map);
     this.map.on('click', this.onMapClick.bind(this));
+  }
+
+  ngAfterViewInit(): void {
+    if (!this.isExistingLocationSelected) {
+      this.initializeMap();
+    }
+  }
+
+  toggleLocationSelection(isExisting: boolean): void {
+    this.isExistingLocationSelected = isExisting;
+    if (!isExisting) {
+      this.mapKey++; // Increment key to force re-render
+      setTimeout(() => this.initializeMap());
+    }
   }
 
   onMapClick(e: L.LeafletMouseEvent): void {
@@ -121,6 +164,7 @@ export class CreateReportFormComponent implements AfterViewInit {
     //getting the number of reports in the location
     let numberOfReports: number = 0;
 
+
     this.reportService.getLocations().subscribe(locations => {
       locations.forEach(location => {
           if (location.name === this.form.value.locationName) {
@@ -130,14 +174,32 @@ export class CreateReportFormComponent implements AfterViewInit {
       );
     });
 
-    let newReport = new Report(
-      this.form.value.baddieName,
-      {
+    let location;
+    if (this.isExistingLocationSelected) {
+      // If existing location is selected, find the location from the locations array
+      const selectedLocation = this.locations.find(loc => loc.name === this.form.value.existingLocation);
+      if (selectedLocation) {
+        location = {
+          ...selectedLocation,
+          numberOfReports: selectedLocation.numberOfReports + 1
+        };
+      } else {
+        console.error("Selected location not found");
+        return;
+      }
+    } else {
+      // If a new location is selected, create a new location object
+      location = {
         name: this.form.value.locationName,
         xCoord: this.currentMarker?.getLatLng().lat || 0,
         yCoord: this.currentMarker?.getLatLng().lng || 0,
-        numberOfReports: numberOfReports
-      },
+        numberOfReports: 1
+      };
+    }
+
+    let newReport = new Report(
+      this.form.value.baddieName,
+      location,
       this.form.value.reporterName,
       this.form.value.reporterPhone,
       formattedDate,
