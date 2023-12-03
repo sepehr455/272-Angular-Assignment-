@@ -22,8 +22,8 @@ Marker.prototype.options.icon = iconDefault;
   templateUrl: './map.component.html',
   standalone: true,
   styleUrl: './map.component.css'
-
 })
+
 export class MapComponent implements AfterViewInit {
 
   private map!: L.Map;

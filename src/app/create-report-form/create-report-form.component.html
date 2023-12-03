@@ -3,7 +3,8 @@
   (ngSubmit)="onSubmit(form.value)"
 >
   <fieldset class="mainContainer">
-    <legend>Create Report</legend>
+    <h3>Create a Report</h3>
+
     <div class="inputLabelPair">
       <label for="nameInput">Baddie Name</label>
       <input type="text" id="nameInput" placeholder="e.g. monster x" formControlName="baddieName"/>
@@ -28,10 +29,22 @@
     </div>
 
     <div class="inputLabelPair">
+      <label for="imageInput">Image URL</label>
+      <input type="text" id="imageInput">
+    </div>
+
+    <div class="inputLabelPair">
       <label for="extraInfoInput">Extra Info</label>
       <input type="text" id="extraInfoInput">
     </div>
 
+    <div class="inputLabelPair">
+      <label for="locationName">Location Name</label>
+      <input type="text" id="locationName">
+    </div>
+
+
+    <div id="formMap" style="height: 400px;"></div>
     <button (click)="createReport()" class="create_button">Submit</button>
   </fieldset>
 

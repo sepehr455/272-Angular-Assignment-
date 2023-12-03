@@ -20,9 +20,15 @@
   gap: 20px;
 }
 
+#formMap {
+  width: 100%;
+  height: 70%;
+}
+
 
 h3 {
   align-self: center;
+  margin-bottom: 0;
 }
 
 #extraInfoInput {
