@@ -1,11 +1,11 @@
 <table [hidden]="reports.length === 0">
   <tr>
-    <td class="headerData">Location</td>
-    <td class="headerData">Baddie's Name</td>
-    <td class="headerData">Time Reported</td>
-    <td class="headerData">Status</td>
+    <td class="headerData" (click)="sortBy('location')">Location</td>
+    <td class="headerData" (click)="sortBy('baddieName')">Baddie's Name</td>
+    <td class="headerData" (click)="sortBy('reportTime')">Time Reported</td>
+    <td class="headerData" (click)="sortBy('status')">Status</td>
   </tr>
-  <tr *ngFor="let report of reports">
+  <tr *ngFor="let report of reports | sort: currentSort">
     <td class="data">{{report.location}}</td>
     <td class="data">{{report.baddieName}}</td>
     <td class="data">{{report.reportTime}}</td>
