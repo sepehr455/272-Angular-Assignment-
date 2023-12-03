@@ -1,6 +1,7 @@
-import {AfterViewInit, Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import * as L from 'leaflet';
 import {icon, Marker} from 'leaflet';
+import {ReportService} from "../ReportService";
 
 const iconRetinaUrl = 'assets/marker-icon-2x.png';
 const iconUrl = 'assets/marker-icon.png';
@@ -24,14 +25,13 @@ Marker.prototype.options.icon = iconDefault;
   styleUrl: './map.component.css'
 })
 
-export class MapComponent implements AfterViewInit {
-
+export class MapComponent implements OnInit {
   private map!: L.Map;
 
-  constructor() {
+  constructor(private reportService: ReportService) {
   }
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
     this.map = L.map('mapId').setView([49.2, -123], 11);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       {
@@ -43,12 +43,16 @@ export class MapComponent implements AfterViewInit {
         zoomOffset: -1,
       }
     ).addTo(this.map);
+     this.loadMarkers();
+  }
 
-    L.marker([49.2276, -123.0076]).addTo(this.map)
-      .bindPopup('<b>Metrotown</b><br>cases reported').openPopup();
-
-    L.marker([49.1867, -123.8490]).addTo(this.map)
-      .bindPopup('<b>SFU Surrey</b><br>cases reported').openPopup();
+  private loadMarkers(): void {
+    this.reportService.getLocations().subscribe(locations => {
+      locations.forEach(location => {
+        L.marker([location.xCoord, location.yCoord]).addTo(this.map)
+          .bindPopup(location.name + " (" + location.numberOfReports + ")");
+      });
+    });
   }
 
 }

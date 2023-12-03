@@ -11,10 +11,16 @@ export class ReportService {
   private reportsSubject = new BehaviorSubject<Report[]>([]);
   public reports$ = this.reportsSubject.asObservable();
 
+  private locationsSubject = new BehaviorSubject<Location[]>([]);
+  public locations$ = this.locationsSubject.asObservable();
+
   constructor(private http: HttpClient) {
   }
 
   private reports: Report[] = [];
+  private locations: Location[] = [];
+
+
 
   updateReports() {
     this.reports = [];
@@ -34,6 +40,7 @@ export class ReportService {
         };
         this.reportsSubject.next(this.reports);
         this.reports.push(currentReport);
+        this.updateLocations();
       });
     });
   }
@@ -63,9 +70,11 @@ export class ReportService {
         next: (response) => {
           this.reports.push(report);
           this.reportsSubject.next(this.reports);
+          this.updateReports();
         }
       }
     );
+    return this.http.post(this.apiUrl, requestObj);
   }
 
   deleteReport(id: string) {
@@ -75,6 +84,7 @@ export class ReportService {
         if (index !== -1) {
           this.reports.splice(index, 1);
           this.reportsSubject.next(this.reports);
+          this.updateLocations();
         }
         console.log(`deleted ${id}`);
       },
@@ -144,6 +154,33 @@ export class ReportService {
         },
       });
     });
+  }
+
+  private updateLocations() {
+    const locationMap: { [key: string]: Location } = {};
+
+    this.reports.forEach(report => {
+      const locationKey = `${report.location.xCoord},${report.location.yCoord}`;
+
+      if (!locationMap[locationKey]) {
+        locationMap[locationKey] = {
+          name: report.location.name,
+          xCoord: report.location.xCoord,
+          yCoord: report.location.yCoord,
+          numberOfReports: 1
+        };
+      } else {
+        locationMap[locationKey].numberOfReports++;
+      }
+    });
+
+    this.locations = Object.values(locationMap);
+    this.locationsSubject.next(this.locations);
+  }
+
+  getLocations() {
+    this.updateLocations();
+    return this.locations$;
   }
 
 }
