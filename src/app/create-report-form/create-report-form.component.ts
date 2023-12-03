@@ -124,7 +124,8 @@ export class CreateReportFormComponent implements AfterViewInit{
       {
         name: this.form.value.location,
         xCoord: this.currentMarker?.getLatLng().lat || 0,
-        yCoord: this.currentMarker?.getLatLng().lng || 0
+        yCoord: this.currentMarker?.getLatLng().lng || 0,
+        numberOfReports: 1
       },
       this.form.value.reporterName,
       this.form.value.reporterPhone,
