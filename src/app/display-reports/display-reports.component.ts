@@ -22,10 +22,6 @@ export class DisplayReportsComponent implements OnInit {
     this.reports = [];
   }
 
-  deleteReport(id: string) {
-    this.reportService.deleteReport(id);
-  }
-
   setStatusToResolved(id: string) {
     this.reportService.setStatusToResolved(id);
   }
@@ -37,7 +33,7 @@ export class DisplayReportsComponent implements OnInit {
       panelClass: 'custom-dialog-container',
       data: {
         confirmAction: () => {
-          this.deleteReport(id);
+          this.reportService.deleteReport(id)
         }
       }
     });
@@ -57,6 +53,9 @@ export class DisplayReportsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.reports = this.reportService.getReports();
+    this.reportService.getReports().subscribe(reports => {
+      this.reports = reports;
+    });
   }
+
 }

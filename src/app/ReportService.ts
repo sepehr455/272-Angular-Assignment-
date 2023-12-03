@@ -8,6 +8,8 @@ import {BehaviorSubject} from "rxjs";
 
 export class ReportService {
   private apiUrl = 'https://272.selfip.net/apps/L8N4sU0a3T/collections/data1/documents/';
+  private reportsSubject = new BehaviorSubject<Report[]>([]);
+  public reports$ = this.reportsSubject.asObservable();
 
   constructor(private http: HttpClient) {
   }
@@ -30,19 +32,19 @@ export class ReportService {
           extraInfo: response.data.extraInfo,
           image: response.data.image
         };
+        this.reportsSubject.next(this.reports);
         this.reports.push(currentReport);
       });
     });
   }
 
-  getReports(): Report[] {
+  getReports() {
     this.updateReports();
-    return this.reports;
+    return this.reports$;
   }
 
 
-  addReport(report: Report){
-    this.reports.push(report);
+  addReport(report: Report) {
     const requestObj = {
       "key": report.id,
       "data": {
@@ -57,20 +59,25 @@ export class ReportService {
       }
     }
 
-    this.http.post(this.apiUrl, requestObj).subscribe((response) => {
-      console.log(response);
-    }
+    this.http.post(this.apiUrl, requestObj).subscribe({
+        next: (response) => {
+          this.reports.push(report);
+          this.reportsSubject.next(this.reports);
+        }
+      }
     );
   }
 
   deleteReport(id: string) {
-    this.reports.find((report, index) => {
-      if (report.id === id) {
-        this.reports.splice(index, 1);
-      }
-    });
-    this.http.delete(`${this.apiUrl}/${id}`).subscribe(() => {
-      console.log(`deleted ${id}`);
+    this.http.delete(`${this.apiUrl}/${id}`).subscribe({
+      next: () => {
+        const index = this.reports.findIndex(report => report.id === id);
+        if (index !== -1) {
+          this.reports.splice(index, 1);
+          this.reportsSubject.next(this.reports);
+        }
+        console.log(`deleted ${id}`);
+      },
     });
   }
 
@@ -82,8 +89,8 @@ export class ReportService {
       }
     }
     this.http.put(this.apiUrl, requestObj).subscribe((response) => {
-      console.log(response);
-    }
+        console.log(response);
+      }
     );
   }
 }

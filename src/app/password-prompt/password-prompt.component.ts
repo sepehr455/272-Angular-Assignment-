@@ -2,7 +2,7 @@ import {Component, Inject, Input, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {HttpClient} from "@angular/common/http";
-import {debounceTime, distinctUntilChanged} from "rxjs";
+import {distinctUntilChanged} from "rxjs";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 
 @Component({
@@ -19,7 +19,7 @@ export class PasswordPromptComponent implements OnInit {
 
   constructor(private http: HttpClient,
               private dialogRef: MatDialogRef<PasswordPromptComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any) {
+              @Inject(MAT_DIALOG_DATA) public data: { confirmAction: () => void }) {
   }
 
   ngOnInit() {
