@@ -1,4 +1,4 @@
-import {AfterViewInit, Component} from '@angular/core';
+import {AfterViewInit, Component, Inject} from '@angular/core';
 import {CommonModule, formatDate} from '@angular/common';
 import {Location, Report} from "../Report";
 
@@ -8,6 +8,8 @@ import {MapComponent} from "../map/map.component";
 import {HttpClientModule} from "@angular/common/http";
 import * as L from "leaflet";
 import {icon, Marker} from "leaflet";
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {ReportDetailsComponent} from "../report-detais/report-details.component";
 
 const iconRetinaUrl = 'assets/marker-icon-2x.png';
 const iconUrl = 'assets/marker-icon.png';
@@ -40,7 +42,7 @@ export class CreateReportFormComponent implements AfterViewInit {
     public mapKey: number = 0;
     reporterPhone = new FormControl('');
 
-    constructor(private reportService: ReportService) {
+    constructor(private reportService: ReportService, public dialogRef: MatDialogRef<ReportDetailsComponent>) {
         let formControls = {
             baddieName: new FormControl('', [
                 Validators.required,
@@ -60,10 +62,7 @@ export class CreateReportFormComponent implements AfterViewInit {
                 Validators.required,
             ]),
             locationSelectionMethod: new FormControl('new'),
-            existingLocation: new FormControl('',
-                [
-                    Validators.required
-                ]),
+            existingLocation: new FormControl(''),
         }
 
 
@@ -106,10 +105,11 @@ export class CreateReportFormComponent implements AfterViewInit {
     onSubmit(): void {
         if (this.form.valid) {
             this.createReport();
+            this.dialogRef.close();
         } else {
             this.form.markAllAsTouched();
-            //print the field that is not valid
-            console.error("Form is not valid");
+            //give a popup saying that the form is invalid
+            alert("Please fill out all required fields");
         }
     }
 

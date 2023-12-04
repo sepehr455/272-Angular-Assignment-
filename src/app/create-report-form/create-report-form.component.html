@@ -41,10 +41,9 @@
 
     <div class="inputLabelPair">
       <label for="extraInfoInput">Extra Info</label>
-      <input type="text" id="extraInfoInput" formControlName="extraInfo">
+      <textarea type="text" id="extraInfoInput" formControlName="extraInfo"></textarea>
     </div>
     <div class="row">
-
       <button type="button" (click)="toggleLocationSelection(false)" [disabled]="!isExistingLocationSelected">New
         Location
       </button>
@@ -76,7 +75,7 @@
 
 
     <div *ngIf="!isExistingLocationSelected" id="formMap" [attr.data-key]="mapKey" style="height: 400px;"></div>
-    <button (click)="onSubmit()" class="create_button">Submit</button>
+    <button type="submit" class="create_button">Submit</button>
   </fieldset>
 
 </form>

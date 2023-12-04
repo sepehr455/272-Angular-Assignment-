@@ -32,7 +32,8 @@ h3 {
 }
 
 #extraInfoInput {
-  height: 100px;
+  /*put the text in the begiining rather than center*/
+  resize: none;
 }
 
 .create_button {
