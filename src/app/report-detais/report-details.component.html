@@ -1,0 +1,25 @@
+<div class="mainContainer">
+    <h2>More Info</h2>
+    <img src="{{ data.report.image }}" class="report-image"/>
+
+    <div class="detail">
+        <strong>Baddie's Name:</strong> {{ data.report.baddieName }}
+    </div>
+    <div class="detail">
+        <strong>Location:</strong> {{ data.report.location.name }}
+    </div>
+    <div class="detail">
+    </div>
+    <strong>Reported by:</strong> {{ data.report.reporterName }} ({{ data.report.reporterPhone }})
+    <div class="detail">
+        <strong>Time:</strong> {{ data.report.reportTime }}
+    </div>
+    <div class="detail">
+        <strong>Status:</strong> {{ data.report.status }}
+    </div>
+    <div class="detail">
+        <strong>Extra Info:</strong> {{ data.report.extraInfo }}
+    </div>
+    <button (click)="close()">BACK</button>
+
+</div>

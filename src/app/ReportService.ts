@@ -62,7 +62,8 @@ export class ReportService {
         "reportDate": report.reportDate,
         "reportTime": report.reportTime,
         "status": report.status,
-        "extraInfo": report.extraInfo
+        "extraInfo": report.extraInfo,
+        "image": report.image,
       }
     }
 

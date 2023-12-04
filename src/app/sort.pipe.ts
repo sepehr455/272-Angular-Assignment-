@@ -5,18 +5,15 @@ import { Report } from './Report';
   standalone: true
 })
 export class SortPipe implements PipeTransform {
-
-  transform(items: Report[], sortBy: keyof Report | null): Report[] {
+  transform(items: Report[], sortBy: string | null): Report[] {
     if (!items || !sortBy) {
       return items;
     }
 
     return items.sort((a, b) => {
-      const valueA = a[sortBy];
-      const valueB = b[sortBy];
+      const valueA = this.getNestedValue(a, sortBy);
+      const valueB = this.getNestedValue(b, sortBy);
 
-      // Here you might need different comparison logic based on the data type
-      // For simplicity, we're assuming the types are comparable directly
       if (valueA < valueB) {
         return -1;
       } else if (valueA > valueB) {
@@ -25,5 +22,14 @@ export class SortPipe implements PipeTransform {
         return 0;
       }
     });
+  }
+
+  private getNestedValue(obj: any, path: string): any {
+    const keys = path.split('.');
+    let result = obj;
+    for (let key of keys) {
+      result = result[key];
+    }
+    return result;
   }
 }

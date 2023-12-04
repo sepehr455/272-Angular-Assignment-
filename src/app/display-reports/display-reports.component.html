@@ -1,6 +1,6 @@
 <table [hidden]="reports.length === 0">
   <tr>
-    <td class="headerData" (click)="sortBy('location')">Location</td>
+    <td class="headerData" (click)="sortBy('location.name')">Location</td>
     <td class="headerData" (click)="sortBy('baddieName')">Baddie's Name</td>
     <td class="headerData" (click)="sortBy('reportTime')">Time Reported</td>
     <td class="headerData" (click)="sortBy('status')">Status</td>
@@ -12,7 +12,7 @@
     <td class="data">{{report.status}}
       <span [hidden]="report.status === 'Resolved'" (click)="displayEditPopUp(report.id)"
             class="clickableText"> Change</span></td>
-    <td><span class="clickableText">MORE INFO</span></td>
+    <td><span  (click)="displayReportDetails(report)" class="clickableText">MORE INFO</span></td>
     <td>
       <button (click)="displayDeletePopUp(report.id)" class="delete-button"> Delete</button>
     </td>

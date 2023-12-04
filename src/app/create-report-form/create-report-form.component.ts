@@ -55,19 +55,14 @@ export class CreateReportFormComponent implements AfterViewInit {
         Validators.required,
         Validators.pattern(/^\d{3}-\d{3}-\d{4}$/)
       ]),
-      status: new FormControl('', [
-        Validators.required,
-      ]),
-      extraInfo: new FormControl('', [
-        Validators.required,
-      ]),
+      extraInfo: new FormControl('' ),
       image: new FormControl('', [
         Validators.required,
       ]),
       locationSelectionMethod: new FormControl('new'),
       existingLocation: new FormControl('',
         [
-          Validators.required
+          // Validators.required
         ]),
     }
 
@@ -108,6 +103,7 @@ export class CreateReportFormComponent implements AfterViewInit {
       this.createReport();
     } else {
       this.form.markAllAsTouched();
+      //print the field that is not valid
       console.error("Form is not valid");
     }
   }

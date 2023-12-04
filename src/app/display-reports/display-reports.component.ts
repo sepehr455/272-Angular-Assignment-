@@ -8,6 +8,7 @@ import {HttpClientModule} from "@angular/common/http";
 import {MatDialog} from "@angular/material/dialog";
 import {PasswordPromptComponent} from "../password-prompt/password-prompt.component";
 import {SortPipe} from "../sort.pipe";
+import {ReportDetailsComponent} from "../report-detais/report-details.component";
 
 @Component({
   selector: 'app-display-reports',
@@ -18,7 +19,7 @@ import {SortPipe} from "../sort.pipe";
 })
 export class DisplayReportsComponent implements OnInit {
   reports: Report[];
-  currentSort: keyof Report | null = null;
+    currentSort: string | null = null;
 
   constructor(private reportService: ReportService, private dialog: MatDialog) {
     this.reports = [];
@@ -41,6 +42,14 @@ export class DisplayReportsComponent implements OnInit {
     });
   }
 
+  displayReportDetails(report: Report) {
+    console.log(report)
+    this.dialog.open(ReportDetailsComponent, {
+      width: '400px',
+      data: { report: report }
+    });
+  }
+
   displayEditPopUp(id: string) {
     this.dialog.open(PasswordPromptComponent, {
       width: '300px',
@@ -60,8 +69,8 @@ export class DisplayReportsComponent implements OnInit {
     });
   }
 
-  sortBy(column: keyof Report): void {
-    this.currentSort = column;
-  }
+    sortBy(column: string): void {
+        this.currentSort = column;
+    }
 
 }
