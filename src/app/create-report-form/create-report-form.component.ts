@@ -74,6 +74,7 @@ export class CreateReportFormComponent implements AfterViewInit {
             }
         });
 
+
         this.form = new FormGroup(formControls);
         this.reportService.getLocations().subscribe(data => {
             this.locations = data;
@@ -100,6 +101,9 @@ export class CreateReportFormComponent implements AfterViewInit {
             }
         }
     }
+
+
+    //removing the validators for lo
 
 
     onSubmit(): void {
@@ -136,12 +140,21 @@ export class CreateReportFormComponent implements AfterViewInit {
         }
     }
 
+    //for toggling the location selection and updating the validators for the location name
     toggleLocationSelection(isExisting: boolean): void {
         this.isExistingLocationSelected = isExisting;
-        if (!isExisting) {
-            this.mapKey++; // Increment key to force re-render
-            setTimeout(() => this.initializeMap());
+        if (isExisting) {
+            this.form.controls['locationName'].clearValidators();
+            this.form.controls['locationName'].updateValueAndValidity();
+            this.form.controls['existingLocation'].setValidators([Validators.required]);
+            this.form.controls['existingLocation'].updateValueAndValidity();
+        } else {
+            this.form.controls['existingLocation'].clearValidators();
+            this.form.controls['existingLocation'].updateValueAndValidity();
+            this.form.controls['locationName'].setValidators([Validators.required]);
+            this.form.controls['locationName'].updateValueAndValidity();
         }
+        this.mapKey++;
     }
 
     onMapClick(e: L.LeafletMouseEvent): void {
