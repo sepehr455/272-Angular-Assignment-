@@ -1,12 +1,12 @@
 import {Component, Inject, Input} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import {CommonModule, NgOptimizedImage} from '@angular/common';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {Report} from "../Report";
 
 @Component({
   selector: 'app-report-detais',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, NgOptimizedImage],
   templateUrl: './report-details.component.html',
   styleUrl: './report-details.component.css'
 })

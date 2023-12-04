@@ -141,8 +141,6 @@ export class ReportService {
       // Send the updated report object to the server
       this.http.put(`${this.apiUrl}/${id}`, requestObj).subscribe({
         next: (response) => {
-          console.log(response);
-
           // Update the local array of reports
           this.reports = this.reports.map((report) => {
               if (report.id === id) {

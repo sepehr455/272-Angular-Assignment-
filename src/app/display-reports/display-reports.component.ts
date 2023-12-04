@@ -43,7 +43,6 @@ export class DisplayReportsComponent implements OnInit {
   }
 
   displayReportDetails(report: Report) {
-    console.log(report)
     this.dialog.open(ReportDetailsComponent, {
       width: '400px',
       data: { report: report }
