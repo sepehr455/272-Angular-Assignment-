@@ -58,22 +58,10 @@ export class CreateReportFormComponent implements AfterViewInit {
                 Validators.pattern(/^\d{3}-\d{3}-\d{4}$/)
             ]),
             extraInfo: new FormControl(''),
-            image: new FormControl('', [
-                Validators.required,
-            ]),
+            image: new FormControl(''),
             locationSelectionMethod: new FormControl('new'),
             existingLocation: new FormControl(''),
         }
-
-
-        //setting the default value of the dropdown
-        this.reportService.getLocations().subscribe(data => {
-            this.locations = data;
-            if (this.locations.length > 0) {
-                this.form.controls['existingLocation'].setValue(this.locations[0].name);
-            }
-        });
-
 
         this.form = new FormGroup(formControls);
         this.reportService.getLocations().subscribe(data => {
@@ -118,6 +106,7 @@ export class CreateReportFormComponent implements AfterViewInit {
     }
 
     private initializeMap(): void {
+
         this.map = L.map('formMap').setView([49.2, -123], 11);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
             {
@@ -129,6 +118,7 @@ export class CreateReportFormComponent implements AfterViewInit {
                 zoomOffset: -1,
             }
         ).addTo(this.map);
+
         //setting a default marker
         this.currentMarker = L.marker([49.2, -123]).addTo(this.map);
         this.map.on('click', this.onMapClick.bind(this));
@@ -149,6 +139,7 @@ export class CreateReportFormComponent implements AfterViewInit {
             this.form.controls['existingLocation'].setValidators([Validators.required]);
             this.form.controls['existingLocation'].updateValueAndValidity();
         } else {
+            setTimeout(() => this.initializeMap(), 0);
             this.form.controls['existingLocation'].clearValidators();
             this.form.controls['existingLocation'].updateValueAndValidity();
             this.form.controls['locationName'].setValidators([Validators.required]);
